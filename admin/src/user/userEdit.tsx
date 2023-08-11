@@ -7,13 +7,11 @@ import {
   SimpleForm,
   NumberInput,
   DateInput,
-  NumberField,
-  TextField,
 } from "react-admin";
 
 export const userEdit: ResourceProps["edit"] = (props) => {
   return (
-    <Edit {...props}>
+    <Edit {...props} mutationMode="pessimistic">
       <SimpleForm>
         <TextInput source="username" label="username" />
         <PasswordInput source="password" type="password" label="password" />

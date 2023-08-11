@@ -1,3 +1,4 @@
+import queryString from "query-string";
 import { fetchUtils } from "ra-core";
 import { DataProvider } from "react-admin";
 
@@ -31,6 +32,7 @@ const dataProvider: DataProvider = {
       params.data.used_traffic = 0;
       if (params.data.expire_at !== undefined)
         params.data.expire_at = new Date(params.data.expire_at);
+      else params.data.expire_at = 0;
     }
     return {
       data: await httpReq(`${apiUrl}/${resource}`, {
@@ -50,10 +52,14 @@ const dataProvider: DataProvider = {
     throw new Error("not implement yet");
   },
   async getList(resource, params) {
+    console.log(params);
     const { page, perPage } = params.pagination;
     const [offset, limit] = [(page - 1) * perPage, perPage];
     const response = await httpReq(
-      `${apiUrl}/${resource}?offset=${offset ?? 0}&limit=${limit ?? 10}`,
+      queryString.stringifyUrl({
+        url: `${apiUrl}/${resource}`,
+        query: { skip: offset, limit, ...(params.filter ?? {}) },
+      }),
       {
         method: "GET",
       }

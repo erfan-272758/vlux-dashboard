@@ -8,8 +8,17 @@ import {
   List,
   NumberField,
   ShowButton,
+  SearchInput,
+  Filter,
+  BooleanInput,
+  DeleteButton,
+  Button,
 } from "react-admin";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+
 import { ItemPagination } from "../UI/pagination";
+import CopyBtn from "../UI/CopyBtn";
+import DeleteWithConfirm from "../UI/DeleteWithConfirm";
 
 // const exporter = (users: any) => {
 //   jsonexport(
@@ -34,7 +43,11 @@ import { ItemPagination } from "../UI/pagination";
 
 export const userList: ResourceProps["list"] = (props) => {
   return (
-    <List {...props} pagination={<ItemPagination />}>
+    <List
+      {...props}
+      filters={[<BooleanInput source="in_active" label="active" key={"0"} />]}
+      pagination={<ItemPagination />}
+    >
       <Datagrid>
         <TextField source="username" label="username" />
         <NumberField source="max_traffic" label="max traffic" />
@@ -42,7 +55,8 @@ export const userList: ResourceProps["list"] = (props) => {
         <DateField source="expire_at" showTime label="expire at" />
         <BooleanField source="is_active" label="active" />
         <EditButton />
-        <ShowButton />
+        <CopyBtn />
+        <DeleteWithConfirm />
       </Datagrid>
     </List>
   );
