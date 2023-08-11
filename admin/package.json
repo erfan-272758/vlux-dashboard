@@ -2,7 +2,7 @@
   "name": "admin",
   "private": true,
   "scripts": {
-    "dev": "cross-env API_URL=http://localhost:8000 vite",
+    "dev": "cross-env API_URL=http://localhost:8000 SERVER_HOST=vpn.co vite",
     "build": "vite build",
     "serve": "vite preview",
     "type-check": "tsc --noEmit",
