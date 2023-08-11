@@ -18,7 +18,7 @@ yarn dev
 
 ## Production
 ### Requirements
-add all env exists in `.env` file into process env
+add all env exists in `.env` file into process env and for build create `.env.local` in root directory and complete fields
 
 Build the application in production mode by running:
 
