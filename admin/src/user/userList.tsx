@@ -2,46 +2,17 @@ import {
   BooleanField,
   Datagrid,
   TextField,
-  DateField,
   EditButton,
   ResourceProps,
   List,
-  NumberField,
-  ShowButton,
-  SearchInput,
-  Filter,
   BooleanInput,
-  DeleteButton,
-  Button,
   FunctionField,
 } from "react-admin";
-import ContentCopy from "@mui/icons-material/ContentCopy";
 
 import { ItemPagination } from "../UI/pagination";
 import CopyBtn from "../UI/CopyBtn";
 import DeleteWithConfirm from "../UI/DeleteWithConfirm";
-
-// const exporter = (users: any) => {
-//   jsonexport(
-//     users,
-//     {
-//       headers: [
-//         "id",
-//         "username",
-//         "password",
-//         "max_traffic",
-//         "used_traffic",
-//         "expire_at",
-//         "active",
-//       ],
-//     },
-//     (err, csv) => {
-//       const BOM = "\uFEFF";
-//       downloadCSV(`${BOM} ${csv}`, "users"); // download as 'posts.csv` file
-//     }
-//   );
-// };
-
+import ColorFullField from "../UI/ColorfullField";
 export const userList: ResourceProps["list"] = (props) => {
   return (
     <List
@@ -51,17 +22,38 @@ export const userList: ResourceProps["list"] = (props) => {
     >
       <Datagrid>
         <TextField source="username" label="username" />
-        <FunctionField
-          source="max_traffic"
-          label="max traffic"
+        <ColorFullField
+          label="traffic"
           render={(record: any) => {
-            const traffic = record.max_traffic;
-            if (traffic === 0) return "unlimited";
-            return traffic;
+            let max_traffic: string | number = record.max_traffic;
+            const used_traffic = record.used_traffic;
+            if (max_traffic === 0) max_traffic = "unlimited";
+            return `${used_traffic} / ${max_traffic}`;
+          }}
+          validate={(r) => {
+            const max_traffic: number = r.max_traffic;
+            const used_traffic: number = r.used_traffic;
+            return !max_traffic || max_traffic > used_traffic;
           }}
         />
-        <NumberField source="used_traffic" label="used" />
-        <BooleanField source="is_active" label="active" />
+        <ColorFullField
+          label="expire at"
+          render={(resource: any) => {
+            const d = new Date(resource.expire_at);
+            if (d.getTime() === 0) return "unlimited";
+            return d.toLocaleString();
+          }}
+          validate={(r) => {
+            const d = new Date(r.expire_at);
+            return d.getTime() === 0 || d.getTime() > Date.now();
+          }}
+        />
+        <BooleanField
+          source="is_active"
+          label="active"
+          valueLabelFalse="inactive"
+          valueLabelTrue="active"
+        />
         <EditButton />
         <CopyBtn />
         <DeleteWithConfirm />
