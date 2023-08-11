@@ -12,7 +12,8 @@ import {
 import { ItemPagination } from "../UI/pagination";
 import CopyBtn from "../UI/CopyBtn";
 import DeleteWithConfirm from "../UI/DeleteWithConfirm";
-import ColorFullField from "../UI/ColorfullField";
+import ColorFullField from "../UI/ColorFullField";
+
 export const userList: ResourceProps["list"] = (props) => {
   return (
     <List
