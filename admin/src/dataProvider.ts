@@ -67,13 +67,22 @@ const dataProvider: DataProvider = {
         method: "GET",
       }
     );
+
+    let total: number;
+    try {
+      total =
+        (await httpReq(`${apiUrl}/${resource}/count`, { method: "GET" })) ?? 0;
+    } catch (err) {
+      total = 10000;
+    }
+
     if (resource === "users") {
       data.forEach((d) => {
         d.max_traffic = (d.max_traffic / 1024 ** 2).toFixed(2);
         d.used_traffic = (d.used_traffic / 1024 ** 2).toFixed(2);
       });
     }
-    return { data, total: 10000 };
+    return { data, total };
   },
   getMany() {
     throw new Error("not implement yet");
