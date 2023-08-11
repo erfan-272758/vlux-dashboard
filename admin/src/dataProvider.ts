@@ -34,6 +34,9 @@ const dataProvider: DataProvider = {
         params.data.expire_at = new Date(params.data.expire_at);
       else params.data.expire_at = 0;
       params.data.max_traffic *= 1024 ** 2;
+
+      if (!params.data.password) delete params.data.password;
+      if (!params.data.username) delete params.data.username;
     }
     return {
       data: await httpReq(`${apiUrl}/${resource}`, {
