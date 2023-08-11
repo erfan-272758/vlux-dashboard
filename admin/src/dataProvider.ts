@@ -33,7 +33,7 @@ const dataProvider: DataProvider = {
       if (params.data.expire_at !== undefined)
         params.data.expire_at = new Date(params.data.expire_at);
       else params.data.expire_at = 0;
-      params.data.max_traffic *= 1024 ** 2;
+      params.data.max_traffic *= 1024;
 
       if (!params.data.password) delete params.data.password;
       if (!params.data.username) delete params.data.username;
@@ -78,8 +78,8 @@ const dataProvider: DataProvider = {
 
     if (resource === "users") {
       data.forEach((d) => {
-        d.max_traffic = +(d.max_traffic / 1024 ** 2).toFixed(2);
-        d.used_traffic = +(d.used_traffic / 1024 ** 2).toFixed(2);
+        d.max_traffic = +(d.max_traffic / 1024).toFixed(2);
+        d.used_traffic = +(d.used_traffic / 1024).toFixed(2);
       });
     }
     return { data, total };
@@ -95,8 +95,10 @@ const dataProvider: DataProvider = {
       method: "GET",
     });
     if (resource === "users") {
-      data.max_traffic = +(data.max_traffic / 1024 ** 2).toFixed(2);
-      data.used_traffic = +(data.used_traffic / 1024 ** 2).toFixed(2);
+      data.max_traffic = +(data.max_traffic / 1024).toFixed(2);
+      data.used_traffic = +(data.used_traffic / 1024).toFixed(2);
+      // const exp = new Date(data.expire_at);
+      // if (exp.getTime() <= 0) delete data.expire_at;
     }
     return {
       data,
@@ -111,7 +113,7 @@ const dataProvider: DataProvider = {
       else params.data.expire_at = 0;
 
       if (params.data.max_traffic !== undefined)
-        params.data.max_traffic *= 1024 ** 2;
+        params.data.max_traffic *= 1024;
     }
 
     return {

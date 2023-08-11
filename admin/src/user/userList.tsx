@@ -41,12 +41,13 @@ export const userList: ResourceProps["list"] = (props) => {
           label="expire at"
           render={(resource: any) => {
             const d = new Date(resource.expire_at);
-            if (d.getTime() === 0) return "unlimited";
+            console.log(d.getTime());
+            if (d.getTime() <= 0) return "unlimited";
             return d.toLocaleString();
           }}
           validate={(r) => {
             const d = new Date(r.expire_at);
-            return d.getTime() === 0 || d.getTime() > Date.now();
+            return d.getTime() <= 0 || d.getTime() > Date.now();
           }}
         />
         <BooleanField
