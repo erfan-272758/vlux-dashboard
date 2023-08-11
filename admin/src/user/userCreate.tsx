@@ -15,12 +15,7 @@ export const userCreate: ResourceProps["create"] = (props) => {
     <Create {...props} redirect={"list"}>
       <SimpleForm>
         <TextInput source="username" label="username" required />
-        <PasswordInput
-          source="password"
-          type="password"
-          label="password"
-          required
-        />
+        <PasswordInput source="password" label="password" required />
         <NumberInput source="max_traffic" label={"traffic"} defaultValue={0} />
         <DateTimeInput source="expire_at" label="expire at" />
         <TextInput source="contact" label="contact" defaultValue={""} />
