@@ -17,6 +17,8 @@ yarn dev
 ```
 
 ## Production
+### Requirements
+add all env exists in `.env` file into process env
 
 Build the application in production mode by running:
 
