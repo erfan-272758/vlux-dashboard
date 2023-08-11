@@ -7,6 +7,7 @@ import {
   ResourceProps,
   List,
   NumberField,
+  ShowButton,
 } from "react-admin";
 import { ItemPagination } from "../UI/pagination";
 
@@ -39,8 +40,9 @@ export const userList: ResourceProps["list"] = (props) => {
         <NumberField source="max_traffic" label="max traffic" />
         <NumberField source="used_traffic" label="used" />
         <DateField source="expire_at" showTime label="expire at" />
-        <BooleanField source="active" label="active" />
+        <BooleanField source="is_active" label="active" />
         <EditButton />
+        <ShowButton />
       </Datagrid>
     </List>
   );

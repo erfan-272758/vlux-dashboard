@@ -1,4 +1,5 @@
 import {
+  BooleanInput,
   Create,
   DateInput,
   NumberInput,
@@ -19,9 +20,10 @@ export const userCreate: ResourceProps["create"] = (props) => {
           label="password"
           required
         />
-        <NumberInput source="max_traffic" label={"traffic"} />
+        <NumberInput source="max_traffic" label={"traffic"} defaultValue={0} />
         <DateInput source="expire_at" label="expire at" />
-        <TextInput source="contact" label="contact" />
+        <TextInput source="contact" label="contact" defaultValue={""} />
+        <BooleanInput source="is_active" label="active" defaultValue={true} />
       </SimpleForm>
     </Create>
   );

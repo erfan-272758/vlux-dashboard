@@ -1,35 +1,54 @@
-import { AuthProvider, HttpError } from "react-admin";
-import data from "./users.json";
+import { AuthProvider, HttpError, fetchUtils } from "react-admin";
 
-/**
- * This authProvider is only for test purposes. Don't use it in production.
- */
+const apiUrl = process.env.API_URL;
+
+const httpReq = async (
+  url: string,
+  options: fetchUtils.Options & { data?: object } = {}
+) => {
+  if (!options.headers)
+    options.headers = new Headers({
+      accept: "application/json",
+      response: "json",
+    });
+
+  const response = await fetchUtils.fetchJson(url, {
+    ...options,
+    body: options.data ? JSON.stringify(options.data) : options.body,
+  });
+  return response.json;
+};
+
 export const authProvider: AuthProvider = {
-  login: ({ username, password }) => {
-    const user = data.users.find(
-      (u) => u.username === username && u.password === password
-    );
+  login: async ({ username, password }) => {
+    const data = await httpReq(`${apiUrl}/token`, {
+      method: "POST",
+      data: {
+        username,
+        password,
+      },
+    });
 
-    if (user) {
+    if (data) {
       // eslint-disable-next-line no-unused-vars
-      let { password, ...userToPersist } = user;
-      localStorage.setItem("user", JSON.stringify(userToPersist));
+      let { access_token } = data;
+      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("token", access_token);
       return Promise.resolve();
     }
 
-    return Promise.reject(
-      new HttpError("Unauthorized", 401, {
-        message: "Invalid username or password",
-      })
-    );
+    throw new HttpError("Unauthorized", 401, {
+      message: "Invalid username or password",
+    });
   },
   logout: () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     return Promise.resolve();
   },
   checkError: () => Promise.resolve(),
   checkAuth: () =>
-    localStorage.getItem("user") ? Promise.resolve() : Promise.reject(),
+    localStorage.getItem("token") ? Promise.resolve() : Promise.reject(),
   getPermissions: () => {
     return Promise.resolve(undefined);
   },
