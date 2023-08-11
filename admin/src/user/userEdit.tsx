@@ -7,6 +7,7 @@ import {
   SimpleForm,
   NumberInput,
   DateInput,
+  DateTimeInput,
 } from "react-admin";
 
 export const userEdit: ResourceProps["edit"] = (props) => {
@@ -17,7 +18,7 @@ export const userEdit: ResourceProps["edit"] = (props) => {
         <PasswordInput source="password" type="password" label="password" />
         <NumberInput source="max_traffic" label={"traffic"} />
         <NumberInput source="used_traffic" label="used" disabled />
-        <DateInput source="expire_at" label="expire at" />
+        <DateTimeInput source="expire_at" label="expire at" />
         <TextInput source="contact" label="contact" />
         <BooleanInput source="is_active" label="active" />
       </SimpleForm>

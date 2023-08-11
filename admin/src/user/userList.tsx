@@ -13,6 +13,7 @@ import {
   BooleanInput,
   DeleteButton,
   Button,
+  FunctionField,
 } from "react-admin";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 
@@ -45,14 +46,21 @@ export const userList: ResourceProps["list"] = (props) => {
   return (
     <List
       {...props}
-      filters={[<BooleanInput source="in_active" label="active" key={"0"} />]}
+      filters={[<BooleanInput source="is_active" label="active" key={"0"} />]}
       pagination={<ItemPagination />}
     >
       <Datagrid>
         <TextField source="username" label="username" />
-        <NumberField source="max_traffic" label="max traffic" />
+        <FunctionField
+          source="max_traffic"
+          label="max traffic"
+          render={(record: any) => {
+            const traffic = record.max_traffic;
+            if (traffic === 0) return "unlimited";
+            return traffic;
+          }}
+        />
         <NumberField source="used_traffic" label="used" />
-        <DateField source="expire_at" showTime label="expire at" />
         <BooleanField source="is_active" label="active" />
         <EditButton />
         <CopyBtn />

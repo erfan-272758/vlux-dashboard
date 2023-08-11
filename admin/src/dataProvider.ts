@@ -33,6 +33,7 @@ const dataProvider: DataProvider = {
       if (params.data.expire_at !== undefined)
         params.data.expire_at = new Date(params.data.expire_at);
       else params.data.expire_at = 0;
+      params.data.max_traffic *= 1024 ** 2;
     }
     return {
       data: await httpReq(`${apiUrl}/${resource}`, {
@@ -52,10 +53,9 @@ const dataProvider: DataProvider = {
     throw new Error("not implement yet");
   },
   async getList(resource, params) {
-    console.log(params);
     const { page, perPage } = params.pagination;
     const [offset, limit] = [(page - 1) * perPage, perPage];
-    const response = await httpReq(
+    const data: any[] = await httpReq(
       queryString.stringifyUrl({
         url: `${apiUrl}/${resource}`,
         query: { skip: offset, limit, ...(params.filter ?? {}) },
@@ -64,7 +64,13 @@ const dataProvider: DataProvider = {
         method: "GET",
       }
     );
-    return { data: response, total: 10000 };
+    if (resource === "users") {
+      data.forEach((d) => {
+        d.max_traffic = (d.max_traffic / 1024 ** 2).toFixed(2);
+        d.used_traffic = (d.used_traffic / 1024 ** 2).toFixed(2);
+      });
+    }
+    return { data, total: 10000 };
   },
   getMany() {
     throw new Error("not implement yet");
@@ -73,13 +79,29 @@ const dataProvider: DataProvider = {
     throw new Error("not implement yet");
   },
   async getOne(resource, params) {
+    const data = await httpReq(`${apiUrl}/${resource}/${params.id}`, {
+      method: "GET",
+    });
+    if (resource === "users") {
+      data.max_traffic = +(data.max_traffic / 1024 ** 2).toFixed(2);
+      data.used_traffic = +(data.used_traffic / 1024 ** 2).toFixed(2);
+    }
     return {
-      data: await httpReq(`${apiUrl}/${resource}/${params.id}`, {
-        method: "GET",
-      }),
+      data,
     };
   },
   async update(resource, params) {
+    if (resource === "users") {
+      // delete params.data.used_traffic;
+
+      if (params.data.expire_at !== undefined)
+        params.data.expire_at = new Date(params.data.expire_at);
+      else params.data.expire_at = 0;
+
+      if (params.data.max_traffic !== undefined)
+        params.data.max_traffic *= 1024 ** 2;
+    }
+
     return {
       data: await httpReq(`${apiUrl}/${resource}/${params.id}`, {
         data: params.data,
