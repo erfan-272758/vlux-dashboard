@@ -21,7 +21,7 @@ const httpReq = async (
 
 export const authProvider: AuthProvider = {
   login: async ({ username, password }) => {
-    const data = await httpReq(`${apiUrl}/token`, {
+    const data = await httpReq(`${apiUrl}/token/`, {
       method: "POST",
       data: {
         username,

@@ -39,7 +39,7 @@ const dataProvider: DataProvider = {
       if (!params.data.username) delete params.data.username;
     }
     return {
-      data: await httpReq(`${apiUrl}/${resource}`, {
+      data: await httpReq(`${apiUrl}/${resource}/`, {
         method: "POST",
         body: JSON.stringify(params.data),
       }),
@@ -47,7 +47,7 @@ const dataProvider: DataProvider = {
   },
   async delete(resource, params) {
     return {
-      data: await httpReq(`${apiUrl}/${resource}/${params.id}`, {
+      data: await httpReq(`${apiUrl}/${resource}/${params.id}/`, {
         method: "DELETE",
       }),
     };
@@ -60,7 +60,7 @@ const dataProvider: DataProvider = {
     const [offset, limit] = [(page - 1) * perPage, perPage];
     const data: any[] = await httpReq(
       queryString.stringifyUrl({
-        url: `${apiUrl}/${resource}`,
+        url: `${apiUrl}/${resource}/`,
         query: { skip: offset, limit, ...(params.filter ?? {}) },
       }),
       {
@@ -71,7 +71,7 @@ const dataProvider: DataProvider = {
     let total: number;
     try {
       total =
-        (await httpReq(`${apiUrl}/${resource}/count`, { method: "GET" })) ?? 0;
+        (await httpReq(`${apiUrl}/${resource}/count/`, { method: "GET" })) ?? 0;
     } catch (err) {
       total = 10000;
     }
@@ -91,7 +91,7 @@ const dataProvider: DataProvider = {
     throw new Error("not implement yet");
   },
   async getOne(resource, params) {
-    const data = await httpReq(`${apiUrl}/${resource}/${params.id}`, {
+    const data = await httpReq(`${apiUrl}/${resource}/${params.id}/`, {
       method: "GET",
     });
     if (resource === "users") {
@@ -117,7 +117,7 @@ const dataProvider: DataProvider = {
     }
 
     return {
-      data: await httpReq(`${apiUrl}/${resource}/${params.id}`, {
+      data: await httpReq(`${apiUrl}/${resource}/${params.id}/`, {
         data: params.data,
         method: "PUT",
       }),
