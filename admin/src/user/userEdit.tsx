@@ -15,7 +15,7 @@ export const userEdit: ResourceProps["edit"] = (props) => {
     <Edit {...props} mutationMode="pessimistic">
       <SimpleForm>
         <TextInput source="username" label="username" />
-        <PasswordInput source="password" type="password" label="password" />
+        <PasswordInput source="password" label="password" />
         <NumberInput source="max_traffic" label={"traffic"} />
         <NumberInput source="used_traffic" label="used" disabled />
         <DateTimeInput source="expire_at" label="expire at" />
