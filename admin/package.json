@@ -2,7 +2,7 @@
   "name": "admin",
   "private": true,
   "scripts": {
-    "dev": "cross-env API_URL=http://localhost:8000 SERVER_HOST=vpn.co vite",
+    "dev": "cross-env API_URL=http://admin.mohkamkar.me:2758/api SERVER_HOST=vpn.co vite",
     "build": "vite build",
     "serve": "vite preview",
     "type-check": "tsc --noEmit",

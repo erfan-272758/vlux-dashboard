@@ -17,7 +17,8 @@ export const userEdit: ResourceProps["edit"] = (props) => {
         <TextInput source="username" label="username" />
         <PasswordInput source="password" label="password" />
         <NumberInput source="max_traffic" label={"traffic"} />
-        <NumberInput source="used_traffic" label="used" disabled />
+        <NumberInput source="download" label="download" disabled />
+        <NumberInput source="upload" label="upload" disabled />
         <DateTimeInput source="expire_at" label="expire at" />
         <TextInput source="contact" label="contact" />
         <BooleanInput source="is_active" label="active" />

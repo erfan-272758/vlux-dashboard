@@ -7,6 +7,7 @@ import {
   List,
   BooleanInput,
   FunctionField,
+  TextInput,
 } from "react-admin";
 
 import { ItemPagination } from "../UI/pagination";
@@ -18,7 +19,10 @@ export const userList: ResourceProps["list"] = (props) => {
   return (
     <List
       {...props}
-      filters={[<BooleanInput source="is_active" label="active" key={"0"} />]}
+      filters={[
+        <BooleanInput source="is_active" label="active" key={"0"} />,
+        <TextInput source="q" label="username" key="1" />,
+      ]}
       pagination={<ItemPagination />}
     >
       <Datagrid>
@@ -26,22 +30,29 @@ export const userList: ResourceProps["list"] = (props) => {
         <ColorFullField
           label="traffic"
           render={(record: any) => {
-            let max_traffic: string | number = record.max_traffic;
-            const used_traffic = record.used_traffic;
-            if (max_traffic === 0) max_traffic = "unlimited";
-            return `${used_traffic} / ${max_traffic}`;
+            return `${record.upload} / ${record.download}`;
           }}
           validate={(r) => {
             const max_traffic: number = r.max_traffic;
-            const used_traffic: number = r.used_traffic;
-            return !max_traffic || max_traffic > used_traffic;
+            const download: number = r.download;
+            const upload: number = r.upload;
+            const used = download + upload;
+            return !max_traffic || max_traffic > used;
           }}
+        />
+        <ColorFullField
+          label="max traffic"
+          render={(record: any) => {
+            let max_traffic: string | number = record.max_traffic;
+            if (max_traffic === 0) max_traffic = "unlimited";
+            return `${max_traffic}`;
+          }}
+          validate={(r) => true}
         />
         <ColorFullField
           label="expire at"
           render={(resource: any) => {
             const d = new Date(resource.expire_at);
-            console.log(d.getTime());
             if (d.getTime() <= 0) return "unlimited";
             return d.toLocaleString();
           }}

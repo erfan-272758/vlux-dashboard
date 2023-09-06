@@ -29,11 +29,12 @@ const httpReq = async (
 const dataProvider: DataProvider = {
   async create(resource, params) {
     if (resource === "users") {
-      params.data.used_traffic = 0;
+      params.data.download = 0;
+      params.data.upload = 0;
       if (params.data.expire_at !== undefined)
-        params.data.expire_at = new Date(params.data.expire_at);
+        params.data.expire_at = new Date(params.data.expire_at).toISOString();
       else params.data.expire_at = 0;
-      params.data.max_traffic *= 1024;
+      params.data.max_traffic *= 1024 ** 3;
 
       if (!params.data.password) delete params.data.password;
       if (!params.data.username) delete params.data.username;
@@ -78,8 +79,10 @@ const dataProvider: DataProvider = {
 
     if (resource === "users") {
       data.forEach((d) => {
-        d.max_traffic = +(d.max_traffic / 1024).toFixed(2);
-        d.used_traffic = +(d.used_traffic / 1024).toFixed(2);
+        d.max_traffic = +(d.max_traffic / 1024 ** 3).toFixed(2);
+        d.upload = +(d.upload / 1024 ** 3).toFixed(2);
+        d.download = +(d.download / 1024 ** 3).toFixed(2);
+        d.expire_at = `${d.expire_at}Z`;
       });
     }
     return { data, total };
@@ -95,8 +98,10 @@ const dataProvider: DataProvider = {
       method: "GET",
     });
     if (resource === "users") {
-      data.max_traffic = +(data.max_traffic / 1024).toFixed(2);
-      data.used_traffic = +(data.used_traffic / 1024).toFixed(2);
+      data.max_traffic = data.max_traffic / 1024 ** 3;
+      data.upload = +(data.upload / 1024 ** 3).toFixed(2);
+      data.download = +(data.download / 1024 ** 3).toFixed(2);
+      data.expire_at = `${data.expire_at}Z`;
       // const exp = new Date(data.expire_at);
       // if (exp.getTime() <= 0) delete data.expire_at;
     }
@@ -113,7 +118,7 @@ const dataProvider: DataProvider = {
       else params.data.expire_at = 0;
 
       if (params.data.max_traffic !== undefined)
-        params.data.max_traffic *= 1024;
+        params.data.max_traffic *= 1024 ** 3;
     }
 
     return {

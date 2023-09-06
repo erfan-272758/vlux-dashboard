@@ -17,9 +17,13 @@ const CopyBtn: FC<EditButtonProps<RaRecord>> = (props) => {
         e.preventDefault();
         e.stopPropagation();
         navigator.clipboard.writeText(
-          `ssh://${record.username}:${encodeURIComponent(record.password)}@${
-            record.host ?? process.env.SERVER_HOST
-          }:${record.port ?? process.env.SERVER_PORT ?? 22}#SSH`
+          `host: \`${record.host ?? process.env.SERVER_HOST}\`
+port: \`${record.port ?? process.env.SERVER_PORT ?? 31000}\`
+username: \`${record.username}\`
+password: \`${record.password}\``
+          // `ssh://${record.username}:${encodeURIComponent(record.password)}@${
+          //   record.host ?? process.env.SERVER_HOST
+          // }:${record.port ?? process.env.SERVER_PORT ?? 22}#SSH`
         );
         notify("copy successfully", { type: "success" });
       }}
